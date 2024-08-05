@@ -1889,9 +1889,9 @@ elseif game.PlaceId == 9431156611 then
         end
     end
 
-    local Section = Tab:NewSection("Chain Teleportation")
+local Section = Tab:NewSection("Chain Teleportation")
     
-    Section:NewButton("Chain Teleportation", "Teleport to nearby players within radius", function()
+   Section:NewButton("Chain Teleportation", "Teleport to nearby players within radius", function()
         local player = game.Players.LocalPlayer
         local character = player.Character or player.CharacterAdded:Wait()
         local runService = game:GetService("RunService")
