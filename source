@@ -1820,7 +1820,7 @@ block.Parent = game.Workspace
     end)
     
     
-    elseif game.PlaceId == 9431156611 then
+elseif game.PlaceId == 9431156611 then
     
     local Section = Tab:NewSection("Creator")
     game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Welcome!",Text = "Welcome to Hub Amber",Icon = "rbxassetid://7733960981",Duration = 10})
