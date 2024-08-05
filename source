@@ -1822,8 +1822,6 @@ block.Parent = game.Workspace
     
 elseif game.PlaceId == 9431156611 then
     
-    game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Welcome!",Text = "Welcome to Hub Amber",Icon = "rbxassetid://7733960981",Duration = 10})
-    
         local bypass;
         bypass = hookmetamethod(game, "__namecall", function(method, ...) 
             if getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.Events.Ban then
@@ -1837,6 +1835,8 @@ elseif game.PlaceId == 9431156611 then
             end
             return bypass(method, ...)
         end)
+
+    game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Welcome!",Text = "Welcome to Hub Amber",Icon = "rbxassetid://7733960981",Duration = 10})
     
     local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Giangplay/Script/main/Kavo.lua"))()
     
