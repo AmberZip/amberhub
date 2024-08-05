@@ -51,6 +51,29 @@ if game.PlaceId == 6403373529 then
     
     local Tab = Window:NewTab("Combat")
 
+ local Section = Tab:NewSection("Slap Aura")
+    
+    Section:NewToggle("Slap Aura", "All Glove", function(state)
+        getgenv().slapaurasr = state
+            if game.Players.LocalPlayer.Character.inMatch.Value == true then
+                while getgenv().slapaurasr do
+                    for i,v in pairs(game.Players:GetChildren()) do
+                        if v ~= game.Players.LocalPlayer and v.Character then
+                            if v.Character:FindFirstChild("Dead") == nil and v.Character:FindFirstChild("HumanoidRootPart") then
+                                Magnitude = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude
+                                if 25 >= Magnitude then
+                                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Slap"):FireServer(v.Character:WaitForChild("HumanoidRootPart"))
+                                end
+                            end
+                        end
+                    end
+                task.wait()
+                end
+            else
+                game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Error",Text = "Wait For Match Started.",Icon = "rbxassetid://7733658504",Duration = 5})
+            end
+    end)
+
     local Section = Tab:NewSection("Chain Teleportation")
     
     Section:NewButton("Chain Teleportation", "Teleport to nearby players within radius", function()
@@ -1887,11 +1910,46 @@ elseif game.PlaceId == 9431156611 then
                 break 
             end
         end
+    end   
+    while true do
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("HumanoidRootPart") then
+                tweenToPlayer(player.Character)
+            end
+        end
+        wait(0.1) 
     end
+        else
+            game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Error",Text = "Wait For Match Started.",Icon = "rbxassetid://7733658504",Duration = 3})
+        end
+    end)
+    
+    local Section = Tab:NewSection("Slap Aura")
+    
+    Section:NewToggle("Slap Aura", "All Glove", function(state)
+        getgenv().slapaurasr = state
+            if game.Players.LocalPlayer.Character.inMatch.Value == true then
+                while getgenv().slapaurasr do
+                    for i,v in pairs(game.Players:GetChildren()) do
+                        if v ~= game.Players.LocalPlayer and v.Character then
+                            if v.Character:FindFirstChild("Dead") == nil and v.Character:FindFirstChild("HumanoidRootPart") then
+                                Magnitude = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude
+                                if 25 >= Magnitude then
+                                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Slap"):FireServer(v.Character:WaitForChild("HumanoidRootPart"))
+                                end
+                            end
+                        end
+                    end
+                task.wait()
+                end
+            else
+                game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Error",Text = "Wait For Match Started.",Icon = "rbxassetid://7733658504",Duration = 5})
+            end
+    end)
 
 local Section = Tab:NewSection("Chain Teleportation")
     
-   Section:NewButton("Chain Teleportation", "Teleport to nearby players within radius", function()
+    Section:NewButton("Chain Teleportation", "Teleport to nearby players within radius", function()
         local player = game.Players.LocalPlayer
         local character = player.Character or player.CharacterAdded:Wait()
         local runService = game:GetService("RunService")
@@ -1969,42 +2027,6 @@ local Section = Tab:NewSection("Chain Teleportation")
                 teleportToPlayer(targetPlayer)
             end
         end)
-    end)
-    
-    while true do
-        for _, player in pairs(Players:GetPlayers()) do
-            if player ~= Players.LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") and player.Character:FindFirstChild("HumanoidRootPart") then
-                tweenToPlayer(player.Character)
-            end
-        end
-        wait(0.1) 
-    end
-        else
-            game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Error",Text = "Wait For Match Started.",Icon = "rbxassetid://7733658504",Duration = 3})
-        end
-    end)
-    
-    local Section = Tab:NewSection("Slap Aura")
-    
-    Section:NewToggle("Slap Aura", "All Glove", function(state)
-        getgenv().slapaurasr = state
-            if game.Players.LocalPlayer.Character.inMatch.Value == true then
-                while getgenv().slapaurasr do
-                    for i,v in pairs(game.Players:GetChildren()) do
-                        if v ~= game.Players.LocalPlayer and v.Character then
-                            if v.Character:FindFirstChild("Dead") == nil and v.Character:FindFirstChild("HumanoidRootPart") then
-                                Magnitude = (game.Players.LocalPlayer.Character.HumanoidRootPart.Position - v.Character.HumanoidRootPart.Position).Magnitude
-                                if 25 >= Magnitude then
-                                    game:GetService("ReplicatedStorage"):WaitForChild("Events"):WaitForChild("Slap"):FireServer(v.Character:WaitForChild("HumanoidRootPart"))
-                                end
-                            end
-                        end
-                    end
-                task.wait()
-                end
-            else
-                game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Error",Text = "Wait For Match Started.",Icon = "rbxassetid://7733658504",Duration = 5})
-            end
     end)
     
     local Tab = Window:NewTab("Misc")
