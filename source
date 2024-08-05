@@ -78,83 +78,107 @@ if game.PlaceId == 6403373529 then
     
     Section:NewButton("Chain Teleportation", "Teleport to nearby players within radius", function()
         local player = game.Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-        local runService = game:GetService("RunService")
-        local teleportCooldown = 0.5  -- Cooldown between teleports
-        local playerCooldown = 5  -- Cooldown for individual players
-        local lastTeleportTime = 0
-        local lastTeleportedPlayers = {}  -- Track players and their last teleport times
+local character = player.Character or player.CharacterAdded:Wait()
+local runService = game:GetService("RunService")
+local teleportCooldown = 0.2  -- Cooldown between teleports
+local playerCooldown = 5  -- Cooldown for individual players
+local lastTeleportTime = 0
+local lastTeleportedPlayers = {}  -- Track players and their last teleport times
+local originalYPosition = character.HumanoidRootPart.Position.Y  -- Store the original Y position of the player
 
-        -- Function to set infinite health
-        local function setInfiniteHealth(humanoid)
-            if humanoid then
-                humanoid.MaxHealth = math.huge
-                humanoid.Health = math.huge
-                humanoid:SetAttribute("InfiniteHealth", true)
-            end
-        end
+-- Function to set infinite health
+local function setInfiniteHealth(humanoid)
+    if humanoid then
+        humanoid.MaxHealth = math.huge
+        humanoid.Health = math.huge
+        humanoid:SetAttribute("InfiniteHealth", true)
+    end
+end
 
-        -- Function to reset health to normal
-        local function resetHealth(humanoid)
-            if humanoid and humanoid:GetAttribute("InfiniteHealth") then
-                humanoid.MaxHealth = humanoid.MaxHealth  -- or whatever the default max health is
-                humanoid.Health = humanoid.MaxHealth
-                humanoid:SetAttribute("InfiniteHealth", nil)
-            end
-        end
+-- Function to reset health to normal
+local function resetHealth(humanoid)
+    if humanoid and humanoid:GetAttribute("InfiniteHealth") then
+        humanoid.MaxHealth = 100  -- or whatever the default max health is
+        humanoid.Health = humanoid.MaxHealth
+        humanoid:SetAttribute("InfiniteHealth", nil)
+    end
+end
 
-        local function teleportToPlayer(target)
-            if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-                local currentTime = tick()
-                local targetPlayerId = target.UserId
-
-                if currentTime - lastTeleportTime >= teleportCooldown then
-                    if not lastTeleportedPlayers[targetPlayerId] or (currentTime - lastTeleportedPlayers[targetPlayerId] >= playerCooldown) then
-                        local humanoid = character:FindFirstChildOfClass("Humanoid")
-                        if humanoid then
-                            setInfiniteHealth(humanoid)
-                        end
-                        
-                        character:MoveTo(target.Character.HumanoidRootPart.Position)
-                        lastTeleportTime = currentTime
-                        lastTeleportedPlayers[targetPlayerId] = currentTime
-
-                        -- Restore normal health after teleporting
-                        wait(0.5)  -- Adjust this delay as needed
-                        if humanoid then
-                            resetHealth(humanoid)
-                        end
+-- Function to perform additional actions after teleportation
+local function performAdditionalActions(target)
+    if target and target.Character then
+        local targetHumanoidRootPart = target.Character:FindFirstChild("HumanoidRootPart")
+        if targetHumanoidRootPart then
+            local playerHumanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+            if playerHumanoidRootPart then
+                local magnitude = (playerHumanoidRootPart.Position - targetHumanoidRootPart.Position).Magnitude
+                if magnitude <= 25 and target.Character.Head:FindFirstChild("UnoReverseCard") == nil then
+                    local gloveValue = player.leaderstats and player.leaderstats.Glove and player.leaderstats.Glove.Value
+                    if gloveValue == "Error" then
+                        shared.gloveHits[gloveValue]:FireServer(targetHumanoidRootPart, true)
                     end
                 end
             end
         end
+    end
+end
 
-        local function findPlayersInRadius(radius)
-            local playersInRadius = {}
-            local playerY = character.HumanoidRootPart.Position.Y  -- Store the Y position of the executing player
-            for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-                if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                    local otherPlayerY = otherPlayer.Character.HumanoidRootPart.Position.Y
-                    if otherPlayerY >= playerY then  -- Check if the other player's Y position is above or equal to the executing player's Y position
-                        local distance = (otherPlayer.Character.HumanoidRootPart.Position - character.HumanoidRootPart.Position).Magnitude
-                        if distance <= radius then
-                            table.insert(playersInRadius, otherPlayer)
-                        end
-                    end
+local function teleportToPlayer(target)
+    if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+        local currentTime = tick()
+        local targetPlayerId = target.UserId
+
+        if currentTime - lastTeleportTime >= teleportCooldown then
+            if not lastTeleportedPlayers[targetPlayerId] or (currentTime - lastTeleportedPlayers[targetPlayerId] >= playerCooldown) then
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    setInfiniteHealth(humanoid)
+                end
+                
+                character:MoveTo(target.Character.HumanoidRootPart.Position)
+                lastTeleportTime = currentTime
+                lastTeleportedPlayers[targetPlayerId] = currentTime
+
+                -- Restore normal health after teleporting
+                wait(0.5)  -- Adjust this delay as needed
+                if humanoid then
+                    resetHealth(humanoid)
+                end
+
+                -- Perform additional actions after teleportation
+                performAdditionalActions(target)
+            end
+        end
+    end
+end
+
+local function findPlayersInRadius(radius)
+    local playersInRadius = {}
+    local playerY = character.HumanoidRootPart.Position.Y  -- Store the Y position of the executing player
+    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local otherPlayerY = otherPlayer.Character.HumanoidRootPart.Position.Y
+            if otherPlayerY >= playerY then  -- Check if the other player's Y position is above or equal to the executing player's Y position
+                local distance = (otherPlayer.Character.HumanoidRootPart.Position - character.HumanoidRootPart.Position).Magnitude
+                local verticalDistance = math.abs(otherPlayerY - originalYPosition)
+                if distance <= radius and verticalDistance <= 50 then  -- Check vertical distance constraint
+                    table.insert(playersInRadius, otherPlayer)
                 end
             end
-            return playersInRadius
         end
+    end
+    return playersInRadius
+end
 
-        local radius = 170  -- Updated radius to 170 studs
+local radius = 225  -- Updated radius to 225 studs
 
-        runService.RenderStepped:Connect(function()
-            local playersInRadius = findPlayersInRadius(radius)
-            for _, targetPlayer in ipairs(playersInRadius) do
-                teleportToPlayer(targetPlayer)
-            end
-        end)
-    end)
+runService.RenderStepped:Connect(function()
+    local playersInRadius = findPlayersInRadius(radius)
+    for _, targetPlayer in ipairs(playersInRadius) do
+        teleportToPlayer(targetPlayer)
+    end
+end)
+
     
     local Section = Tab:NewSection("Remove CD")
     
@@ -1951,83 +1975,107 @@ local Section = Tab:NewSection("Chain Teleportation")
     
     Section:NewButton("Chain Teleportation", "Teleport to nearby players within radius", function()
         local player = game.Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-        local runService = game:GetService("RunService")
-        local teleportCooldown = 0.5  -- Cooldown between teleports
-        local playerCooldown = 5  -- Cooldown for individual players
-        local lastTeleportTime = 0
-        local lastTeleportedPlayers = {}  -- Track players and their last teleport times
+local character = player.Character or player.CharacterAdded:Wait()
+local runService = game:GetService("RunService")
+local teleportCooldown = 0.2  -- Cooldown between teleports
+local playerCooldown = 5  -- Cooldown for individual players
+local lastTeleportTime = 0
+local lastTeleportedPlayers = {}  -- Track players and their last teleport times
+local originalYPosition = character.HumanoidRootPart.Position.Y  -- Store the original Y position of the player
 
-        -- Function to set infinite health
-        local function setInfiniteHealth(humanoid)
-            if humanoid then
-                humanoid.MaxHealth = math.huge
-                humanoid.Health = math.huge
-                humanoid:SetAttribute("InfiniteHealth", true)
-            end
-        end
+-- Function to set infinite health
+local function setInfiniteHealth(humanoid)
+    if humanoid then
+        humanoid.MaxHealth = math.huge
+        humanoid.Health = math.huge
+        humanoid:SetAttribute("InfiniteHealth", true)
+    end
+end
 
-        -- Function to reset health to normal
-        local function resetHealth(humanoid)
-            if humanoid and humanoid:GetAttribute("InfiniteHealth") then
-                humanoid.MaxHealth = humanoid.MaxHealth -- or whatever the default max health is
-                humanoid.Health = humanoid.MaxHealth
-                humanoid:SetAttribute("InfiniteHealth", nil)
-            end
-        end
+-- Function to reset health to normal
+local function resetHealth(humanoid)
+    if humanoid and humanoid:GetAttribute("InfiniteHealth") then
+        humanoid.MaxHealth = 100  -- or whatever the default max health is
+        humanoid.Health = humanoid.MaxHealth
+        humanoid:SetAttribute("InfiniteHealth", nil)
+    end
+end
 
-        local function teleportToPlayer(target)
-            if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-                local currentTime = tick()
-                local targetPlayerId = target.UserId
-
-                if currentTime - lastTeleportTime >= teleportCooldown then
-                    if not lastTeleportedPlayers[targetPlayerId] or (currentTime - lastTeleportedPlayers[targetPlayerId] >= playerCooldown) then
-                        local humanoid = character:FindFirstChildOfClass("Humanoid")
-                        if humanoid then
-                            setInfiniteHealth(humanoid)
-                        end
-                        
-                        character:MoveTo(target.Character.HumanoidRootPart.Position)
-                        lastTeleportTime = currentTime
-                        lastTeleportedPlayers[targetPlayerId] = currentTime
-
-                        -- Restore normal health after teleporting
-                        wait(0.5)  -- Adjust this delay as needed
-                        if humanoid then
-                            resetHealth(humanoid)
-                        end
+-- Function to perform additional actions after teleportation
+local function performAdditionalActions(target)
+    if target and target.Character then
+        local targetHumanoidRootPart = target.Character:FindFirstChild("HumanoidRootPart")
+        if targetHumanoidRootPart then
+            local playerHumanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+            if playerHumanoidRootPart then
+                local magnitude = (playerHumanoidRootPart.Position - targetHumanoidRootPart.Position).Magnitude
+                if magnitude <= 25 and target.Character.Head:FindFirstChild("UnoReverseCard") == nil then
+                    local gloveValue = player.leaderstats and player.leaderstats.Glove and player.leaderstats.Glove.Value
+                    if gloveValue == "Error" then
+                        shared.gloveHits[gloveValue]:FireServer(targetHumanoidRootPart, true)
                     end
                 end
             end
         end
+    end
+end
 
-        local function findPlayersInRadius(radius)
-            local playersInRadius = {}
-            local playerY = character.HumanoidRootPart.Position.Y  -- Store the Y position of the executing player
-            for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-                if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                    local otherPlayerY = otherPlayer.Character.HumanoidRootPart.Position.Y
-                    if otherPlayerY >= playerY then  -- Check if the other player's Y position is above or equal to the executing player's Y position
-                        local distance = (otherPlayer.Character.HumanoidRootPart.Position - character.HumanoidRootPart.Position).Magnitude
-                        if distance <= radius then
-                            table.insert(playersInRadius, otherPlayer)
-                        end
-                    end
+local function teleportToPlayer(target)
+    if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+        local currentTime = tick()
+        local targetPlayerId = target.UserId
+
+        if currentTime - lastTeleportTime >= teleportCooldown then
+            if not lastTeleportedPlayers[targetPlayerId] or (currentTime - lastTeleportedPlayers[targetPlayerId] >= playerCooldown) then
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    setInfiniteHealth(humanoid)
+                end
+                
+                character:MoveTo(target.Character.HumanoidRootPart.Position)
+                lastTeleportTime = currentTime
+                lastTeleportedPlayers[targetPlayerId] = currentTime
+
+                -- Restore normal health after teleporting
+                wait(0.5)  -- Adjust this delay as needed
+                if humanoid then
+                    resetHealth(humanoid)
+                end
+
+                -- Perform additional actions after teleportation
+                performAdditionalActions(target)
+            end
+        end
+    end
+end
+
+local function findPlayersInRadius(radius)
+    local playersInRadius = {}
+    local playerY = character.HumanoidRootPart.Position.Y  -- Store the Y position of the executing player
+    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local otherPlayerY = otherPlayer.Character.HumanoidRootPart.Position.Y
+            if otherPlayerY >= playerY then  -- Check if the other player's Y position is above or equal to the executing player's Y position
+                local distance = (otherPlayer.Character.HumanoidRootPart.Position - character.HumanoidRootPart.Position).Magnitude
+                local verticalDistance = math.abs(otherPlayerY - originalYPosition)
+                if distance <= radius and verticalDistance <= 50 then  -- Check vertical distance constraint
+                    table.insert(playersInRadius, otherPlayer)
                 end
             end
-            return playersInRadius
         end
+    end
+    return playersInRadius
+end
 
-        local radius = 170 -- Updated radius to 225 studs
+local radius = 225  -- Updated radius to 225 studs
 
-        runService.RenderStepped:Connect(function()
-            local playersInRadius = findPlayersInRadius(radius)
-            for _, targetPlayer in ipairs(playersInRadius) do
-                teleportToPlayer(targetPlayer)
-            end
-        end)
-    end)
+runService.RenderStepped:Connect(function()
+    local playersInRadius = findPlayersInRadius(radius)
+    for _, targetPlayer in ipairs(playersInRadius) do
+        teleportToPlayer(targetPlayer)
+    end
+end)
+
     
     local Tab = Window:NewTab("Misc")
     
@@ -3909,84 +3957,108 @@ elseif game.PlaceId == 11520107397 then
       local Section = Tab:NewSection("Chain Teleportation")
     
     Section:NewButton("Chain Teleportation", "Teleport to nearby players within radius", function()
-        local player = game.Players.LocalPlayer
-        local character = player.Character or player.CharacterAdded:Wait()
-        local runService = game:GetService("RunService")
-        local teleportCooldown = 0.5  -- Cooldown between teleports
-        local playerCooldown = 5  -- Cooldown for individual players
-        local lastTeleportTime = 0
-        local lastTeleportedPlayers = {}  -- Track players and their last teleport times
+       local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local runService = game:GetService("RunService")
+local teleportCooldown = 0.2  -- Cooldown between teleports
+local playerCooldown = 5  -- Cooldown for individual players
+local lastTeleportTime = 0
+local lastTeleportedPlayers = {}  -- Track players and their last teleport times
+local originalYPosition = character.HumanoidRootPart.Position.Y  -- Store the original Y position of the player
 
-        -- Function to set infinite health
-        local function setInfiniteHealth(humanoid)
-            if humanoid then
-                humanoid.MaxHealth = math.huge
-                humanoid.Health = math.huge
-                humanoid:SetAttribute("InfiniteHealth", true)
-            end
-        end
+-- Function to set infinite health
+local function setInfiniteHealth(humanoid)
+    if humanoid then
+        humanoid.MaxHealth = math.huge
+        humanoid.Health = math.huge
+        humanoid:SetAttribute("InfiniteHealth", true)
+    end
+end
 
-        -- Function to reset health to normal
-        local function resetHealth(humanoid)
-            if humanoid and humanoid:GetAttribute("InfiniteHealth") then
-                humanoid.MaxHealth = 100  -- or whatever the default max health is
-                humanoid.Health = humanoid.MaxHealth
-                humanoid:SetAttribute("InfiniteHealth", nil)
-            end
-        end
+-- Function to reset health to normal
+local function resetHealth(humanoid)
+    if humanoid and humanoid:GetAttribute("InfiniteHealth") then
+        humanoid.MaxHealth = 100  -- or whatever the default max health is
+        humanoid.Health = humanoid.MaxHealth
+        humanoid:SetAttribute("InfiniteHealth", nil)
+    end
+end
 
-        local function teleportToPlayer(target)
-            if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-                local currentTime = tick()
-                local targetPlayerId = target.UserId
-
-                if currentTime - lastTeleportTime >= teleportCooldown then
-                    if not lastTeleportedPlayers[targetPlayerId] or (currentTime - lastTeleportedPlayers[targetPlayerId] >= playerCooldown) then
-                        local humanoid = character:FindFirstChildOfClass("Humanoid")
-                        if humanoid then
-                            setInfiniteHealth(humanoid)
-                        end
-                        
-                        character:MoveTo(target.Character.HumanoidRootPart.Position)
-                        lastTeleportTime = currentTime
-                        lastTeleportedPlayers[targetPlayerId] = currentTime
-
-                        -- Restore normal health after teleporting
-                        wait(0.5)  -- Adjust this delay as needed
-                        if humanoid then
-                            resetHealth(humanoid)
-                        end
+-- Function to perform additional actions after teleportation
+local function performAdditionalActions(target)
+    if target and target.Character then
+        local targetHumanoidRootPart = target.Character:FindFirstChild("HumanoidRootPart")
+        if targetHumanoidRootPart then
+            local playerHumanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+            if playerHumanoidRootPart then
+                local magnitude = (playerHumanoidRootPart.Position - targetHumanoidRootPart.Position).Magnitude
+                if magnitude <= 25 and target.Character.Head:FindFirstChild("UnoReverseCard") == nil then
+                    local gloveValue = player.leaderstats and player.leaderstats.Glove and player.leaderstats.Glove.Value
+                    if gloveValue == "Error" then
+                        shared.gloveHits[gloveValue]:FireServer(targetHumanoidRootPart, true)
                     end
                 end
             end
         end
+    end
+end
 
-        local function findPlayersInRadius(radius)
-            local playersInRadius = {}
-            local playerY = character.HumanoidRootPart.Position.Y  -- Store the Y position of the executing player
-            for _, otherPlayer in pairs(game.Players:GetPlayers()) do
-                if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                    local otherPlayerY = otherPlayer.Character.HumanoidRootPart.Position.Y
-                    if otherPlayerY >= playerY then  -- Check if the other player's Y position is above or equal to the executing player's Y position
-                        local distance = (otherPlayer.Character.HumanoidRootPart.Position - character.HumanoidRootPart.Position).Magnitude
-                        if distance <= radius then
-                            table.insert(playersInRadius, otherPlayer)
-                        end
-                    end
+local function teleportToPlayer(target)
+    if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+        local currentTime = tick()
+        local targetPlayerId = target.UserId
+
+        if currentTime - lastTeleportTime >= teleportCooldown then
+            if not lastTeleportedPlayers[targetPlayerId] or (currentTime - lastTeleportedPlayers[targetPlayerId] >= playerCooldown) then
+                local humanoid = character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    setInfiniteHealth(humanoid)
+                end
+                
+                character:MoveTo(target.Character.HumanoidRootPart.Position)
+                lastTeleportTime = currentTime
+                lastTeleportedPlayers[targetPlayerId] = currentTime
+
+                -- Restore normal health after teleporting
+                wait(0.5)  -- Adjust this delay as needed
+                if humanoid then
+                    resetHealth(humanoid)
+                end
+
+                -- Perform additional actions after teleportation
+                performAdditionalActions(target)
+            end
+        end
+    end
+end
+
+local function findPlayersInRadius(radius)
+    local playersInRadius = {}
+    local playerY = character.HumanoidRootPart.Position.Y  -- Store the Y position of the executing player
+    for _, otherPlayer in pairs(game.Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            local otherPlayerY = otherPlayer.Character.HumanoidRootPart.Position.Y
+            if otherPlayerY >= playerY then  -- Check if the other player's Y position is above or equal to the executing player's Y position
+                local distance = (otherPlayer.Character.HumanoidRootPart.Position - character.HumanoidRootPart.Position).Magnitude
+                local verticalDistance = math.abs(otherPlayerY - originalYPosition)
+                if distance <= radius and verticalDistance <= 50 then  -- Check vertical distance constraint
+                    table.insert(playersInRadius, otherPlayer)
                 end
             end
-            return playersInRadius
         end
+    end
+    return playersInRadius
+end
 
-        local radius = 225  -- Updated radius to 225 studs
+local radius = 225  -- Updated radius to 225 studs
 
-        runService.RenderStepped:Connect(function()
-            local playersInRadius = findPlayersInRadius(radius)
-            for _, targetPlayer in ipairs(playersInRadius) do
-                teleportToPlayer(targetPlayer)
-            end
-        end)
-    end)
+runService.RenderStepped:Connect(function()
+    local playersInRadius = findPlayersInRadius(radius)
+    for _, targetPlayer in ipairs(playersInRadius) do
+        teleportToPlayer(targetPlayer)
+    end
+end)
+
 
     local Section = Tab:NewSection("Spam KS")
 
