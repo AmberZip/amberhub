@@ -1819,8 +1819,10 @@ block.Parent = game.Workspace
         workspace.Gravity = s
     end)
     
-})   
+    
 elseif game.PlaceId == 9431156611 then
+    
+    game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Welcome!",Text = "Welcome to Hub Amber",Icon = "rbxassetid://7733960981",Duration = 10})
     
         local bypass;
         bypass = hookmetamethod(game, "__namecall", function(method, ...) 
@@ -1835,8 +1837,6 @@ elseif game.PlaceId == 9431156611 then
             end
             return bypass(method, ...)
         end)
-
-    game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Welcome!",Text = "Welcome to Hub Amber",Icon = "rbxassetid://7733960981",Duration = 10})
     
     local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Giangplay/Script/main/Kavo.lua"))()
     
@@ -1864,6 +1864,13 @@ elseif game.PlaceId == 9431156611 then
     
     local Tab = Window:NewTab("Combat")
     
+    local Section = Tab:NewSection("Auto Win")
+    
+    Section:NewButton("Auto Win", "On Slap Aura and remove Acid,Lava", function()
+        if game.Players.LocalPlayer.Character:WaitForChild("inMatch").Value == true then
+            local TweenService = game:GetService("TweenService")
+            local Players = game:GetService("Players")
+    
     local function tweenToPlayer(target)
         local tweenInfo = TweenInfo.new(2.75, Enum.EasingStyle.Linear, Enum.EasingDirection.In)
         local tween = TweenService:Create(
@@ -1882,7 +1889,7 @@ elseif game.PlaceId == 9431156611 then
         end
     end
 
-    local Section = Tab:NewSection("Chain Teleportation")
+       local Section = Tab:NewSection("Chain Teleportation")
     
     Section:NewButton("Chain Teleportation", "Teleport to nearby players within radius", function()
         local player = game.Players.LocalPlayer
