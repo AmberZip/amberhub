@@ -3877,16 +3877,6 @@ elseif game.PlaceId == 11520107397 then
         end
         return bypass(method, ...)
     end)
-
-    game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Welcome!",Text = "Welcome to Hub Kykyryz0B.",Icon = "rbxassetid://7733960981",Duration = 10})
-    
-    local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Giangplay/Script/main/Kavo.lua"))()
-    
-    local Window = Library.CreateLib("Amber Hub | Slap-Battles KILLSTREAK-ONLY", "DarkTheme")
-    
-    local Tab = Window:NewTab("INFO")
-    
-    local Section = Tab:NewSection("Creator")
     
   game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Welcome!",Text = "Welcome to Hub Amber",Icon = "rbxassetid://7733960981",Duration = 10})
     
