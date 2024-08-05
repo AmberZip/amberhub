@@ -1822,8 +1822,21 @@ block.Parent = game.Workspace
     
 elseif game.PlaceId == 9431156611 then
     
-    local Section = Tab:NewSection("Creator")
     game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Welcome!",Text = "Welcome to Hub Amber",Icon = "rbxassetid://7733960981",Duration = 10})
+    
+        local bypass;
+        bypass = hookmetamethod(game, "__namecall", function(method, ...) 
+            if getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.Events.Ban then
+                return
+            elseif getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.Events.AdminGUI then
+                return
+            elseif getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.Events.WS then
+                return
+            elseif getnamecallmethod() == "FireServer" and method == game.ReplicatedStorage.Events.WS2 then
+                return
+            end
+            return bypass(method, ...)
+        end)
     
     local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Giangplay/Script/main/Kavo.lua"))()
     
