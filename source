@@ -80,7 +80,7 @@ if game.PlaceId == 6403373529 then
         local player = game.Players.LocalPlayer
         local character = player.Character or player.CharacterAdded:Wait()
         local runService = game:GetService("RunService")
-        local teleportCooldown = 0.35  -- Cooldown between teleports
+        local teleportCooldown = 0.5  -- Cooldown between teleports
         local playerCooldown = 5  -- Cooldown for individual players
         local lastTeleportTime = 0
         local lastTeleportedPlayers = {}  -- Track players and their last teleport times
@@ -97,7 +97,7 @@ if game.PlaceId == 6403373529 then
         -- Function to reset health to normal
         local function resetHealth(humanoid)
             if humanoid and humanoid:GetAttribute("InfiniteHealth") then
-                humanoid.MaxHealth = 100  -- or whatever the default max health is
+                humanoid.MaxHealth = humanoid.MaxHealth  -- or whatever the default max health is
                 humanoid.Health = humanoid.MaxHealth
                 humanoid:SetAttribute("InfiniteHealth", nil)
             end
@@ -146,7 +146,7 @@ if game.PlaceId == 6403373529 then
             return playersInRadius
         end
 
-        local radius = 225  -- Updated radius to 225 studs
+        local radius = 170  -- Updated radius to 170 studs
 
         runService.RenderStepped:Connect(function()
             local playersInRadius = findPlayersInRadius(radius)
@@ -1953,7 +1953,7 @@ local Section = Tab:NewSection("Chain Teleportation")
         local player = game.Players.LocalPlayer
         local character = player.Character or player.CharacterAdded:Wait()
         local runService = game:GetService("RunService")
-        local teleportCooldown = 0.35  -- Cooldown between teleports
+        local teleportCooldown = 0.5  -- Cooldown between teleports
         local playerCooldown = 5  -- Cooldown for individual players
         local lastTeleportTime = 0
         local lastTeleportedPlayers = {}  -- Track players and their last teleport times
@@ -1970,7 +1970,7 @@ local Section = Tab:NewSection("Chain Teleportation")
         -- Function to reset health to normal
         local function resetHealth(humanoid)
             if humanoid and humanoid:GetAttribute("InfiniteHealth") then
-                humanoid.MaxHealth = 100  -- or whatever the default max health is
+                humanoid.MaxHealth = humanoid.MaxHealth -- or whatever the default max health is
                 humanoid.Health = humanoid.MaxHealth
                 humanoid:SetAttribute("InfiniteHealth", nil)
             end
@@ -2019,7 +2019,7 @@ local Section = Tab:NewSection("Chain Teleportation")
             return playersInRadius
         end
 
-        local radius = 225  -- Updated radius to 225 studs
+        local radius = 170 -- Updated radius to 225 studs
 
         runService.RenderStepped:Connect(function()
             local playersInRadius = findPlayersInRadius(radius)
@@ -3912,7 +3912,7 @@ elseif game.PlaceId == 11520107397 then
         local player = game.Players.LocalPlayer
         local character = player.Character or player.CharacterAdded:Wait()
         local runService = game:GetService("RunService")
-        local teleportCooldown = 0.35  -- Cooldown between teleports
+        local teleportCooldown = 0.5  -- Cooldown between teleports
         local playerCooldown = 5  -- Cooldown for individual players
         local lastTeleportTime = 0
         local lastTeleportedPlayers = {}  -- Track players and their last teleport times
