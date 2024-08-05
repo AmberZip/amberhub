@@ -1819,10 +1819,6 @@ block.Parent = game.Workspace
         workspace.Gravity = s
     end)
     
-    Library:ToggleUIGui({
-          Icons = "rbxassetid://16393121436",
-          Rainbow = true
-    })
     
     elseif game.PlaceId == 9431156611 then
     
@@ -2611,10 +2607,6 @@ block.Parent = game.Workspace
         workspace.Gravity = s
     end)
     
-    Library:ToggleUIGui({
-          Icons = "rbxassetid://16393121436",
-          Rainbow = true
-    })
     
     elseif game.PlaceId == 9020359053 then
     
@@ -2735,10 +2727,6 @@ block.Parent = game.Workspace
     game:GetService("TeleportService"):Teleport(9412268818)
     end)
     
-    Library:ToggleUIGui({
-          Icons = "rbxassetid://16393121436",
-          Rainbow = true
-    })
     
     elseif game.PlaceId == 9412268818 then
         
@@ -2859,10 +2847,6 @@ block.Parent = game.Workspace
     game:GetService("TeleportService"):Teleport(9020359053)
     end)
     
-    Library:ToggleUIGui({
-          Icons = "rbxassetid://16393121436",
-          Rainbow = true
-    })
     
     elseif game.PlaceId == 13833961666 then
     
@@ -3058,10 +3042,6 @@ block.Parent = game.Workspace
         workspace.Gravity = s
     end)
     
-    Library:ToggleUIGui({
-          Icons = "rbxassetid://16393121436",
-          Rainbow = true
-    })
     
     elseif game.PlaceId == 11828384869 then
         
@@ -3409,10 +3389,6 @@ block.Parent = game.Workspace
     end)
     
     
-    Library:ToggleUIGui({
-          Icons = "rbxassetid://16393121436",
-          Rainbow = true
-    })
     
     elseif game.PlaceId == 14422118326 then
     
@@ -3592,10 +3568,7 @@ block.Parent = game.Workspace
     end)
     
     
-    Library:ToggleUIGui({
-          Icons = "rbxassetid://16393121436",
-          Rainbow = true
-    })
+
     
     elseif game.PlaceId == 15507333474 then
 
@@ -3740,10 +3713,7 @@ block.Parent = game.Workspace
     end)
     
     
-    Library:ToggleUIGui({
-          Icons = "rbxassetid://16393121436",
-          Rainbow = true
-    })
+
     
     elseif game.PlaceId == 16034567693 then
             
@@ -3859,10 +3829,6 @@ block.Parent = game.Workspace
     game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Good!",Text = "Anti AFK On.",Icon = "rbxassetid://7733658504",Duration = 10})
     end)
     
-    Library:ToggleUIGui({
-          Icons = "rbxassetid://16393121436",
-          Rainbow = true
-    })
 
 elseif game.PlaceId == 11520107397 then
 
@@ -4600,10 +4566,6 @@ block.Parent = game.Workspace
     end)
     
     
-    Library:ToggleUIGui({
-          Icons = "rbxassetid://16393121436",
-          Rainbow = true
-    })
 
 elseif game.PlaceId == 17290438723 then
 
@@ -4664,11 +4626,6 @@ for i,v in ipairs(game:GetService("Workspace"):GetDescendants()) do
             end
         end
     end)
-
-    Library:ToggleUIGui({
-        Icons = "rbxassetid://16393121436",
-        Rainbow = true
-    })
 
     elseif game.PlaceId == 18550498098 then
 
@@ -4876,11 +4833,6 @@ Section:NewSlider("Gravity Hack", "SliderInfo", 500, 0, function(s)
     workspace.Gravity = s
 end)
 
-Library:ToggleUIGui({
-      Icons = "rbxassetid://16393121436",
-      Rainbow = true
-})
-
 elseif game.PlaceId == 18698003301 then
 
     game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Welcome!",Text = "Welcome to Hub Kykyryz0B.",Icon = "rbxassetid://7733960981",Duration = 10})
@@ -4995,10 +4947,6 @@ elseif game.PlaceId == 18698003301 then
         workspace.Gravity = s
     end)
     
-    Library:ToggleUIGui({
-          Icons = "rbxassetid://16393121436",
-          Rainbow = true
-    })
 
     else
         game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Error",Text = "You're in the wrong game.",Icon = "rbxassetid://7733658504",Duration = 10})
