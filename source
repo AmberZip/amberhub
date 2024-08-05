@@ -3912,7 +3912,7 @@ elseif game.PlaceId == 11520107397 then
         local player = game.Players.LocalPlayer
         local character = player.Character or player.CharacterAdded:Wait()
         local runService = game:GetService("RunService")
-        local teleportCooldown = 0.5  -- Cooldown between teleports
+        local teleportCooldown = 0.7  -- Cooldown between teleports
         local playerCooldown = 5  -- Cooldown for individual players
         local lastTeleportTime = 0
         local lastTeleportedPlayers = {}  -- Track players and their last teleport times
@@ -3978,7 +3978,7 @@ elseif game.PlaceId == 11520107397 then
             return playersInRadius
         end
 
-        local radius = 225  -- Updated radius to 225 studs
+        local radius = 170  -- Updated radius to 170 studs
 
         runService.RenderStepped:Connect(function()
             local playersInRadius = findPlayersInRadius(radius)
@@ -4013,7 +4013,7 @@ elseif game.PlaceId == 11520107397 then
     
         while getgenv().nullspamks do
             game:GetService("ReplicatedStorage"):WaitForChild("NullAbility"):FireServer()
-        task.wait(0.5)
+        task.wait(0.1)
         end
     end)
     
