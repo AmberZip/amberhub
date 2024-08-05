@@ -135,7 +135,7 @@ if game.PlaceId == 6403373529 then
             for _, otherPlayer in pairs(game.Players:GetPlayers()) do
                 if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
                     local otherPlayerY = otherPlayer.Character.HumanoidRootPart.Position.Y
-                    if otherPlayerY >= playerY then  -- Check if the other player's Y position is above or equal to the executing player's Y position
+                    if otherPlayerY >= playerY and otherPlayerY -80 <= playerY then  -- Check if the other player's Y position is above or equal to the executing player's Y position
                         local distance = (otherPlayer.Character.HumanoidRootPart.Position - character.HumanoidRootPart.Position).Magnitude
                         if distance <= radius then
                             table.insert(playersInRadius, otherPlayer)
