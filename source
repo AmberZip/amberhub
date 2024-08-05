@@ -1819,7 +1819,7 @@ block.Parent = game.Workspace
         workspace.Gravity = s
     end)
     
-    
+})   
 elseif game.PlaceId == 9431156611 then
     
         local bypass;
