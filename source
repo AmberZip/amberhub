@@ -3536,7 +3536,7 @@ local Section = Tab:NewSection("Chain Teleportation")
     
     local Section = Tab:NewSection("Anti Null")
     
-    Section:NewToggle("Anti Null", "Anti NUll", function(state)
+    Section:Button("Anti Null", "Anti NUll", function(state)
         getgenv().antinullnull = state
         while getgenv().antinullnull do
             for i,v in pairs(game.Workspace.Mobs:GetChildren()) do
@@ -3583,7 +3583,7 @@ local Section = Tab:NewSection("Chain Teleportation")
     
 
     
-    elseif game.PlaceId == 15507333474 then
+    elseif game.PlaceId == 155073334742 then
 
     local bypass;
         bypass = hookmetamethod(game, "__namecall", function(method, ...) 
@@ -4538,14 +4538,19 @@ block.Parent = game.Workspace
             end
     end)
 
-    Section:NewToggle("Anti Null", "Disable Null minions", function(state)
-       for i,v in pairs(game.Workspace:GetChildren()) do
-                    if v.Name == "Imp" and v:FindFirstChild("Body") then
-                       game.ReplicatedStorage.KSHit:FireServer(v.Body,true)
-                  end
+    Section:NewToggle("Disable Null (PERM)", "Disable Null minions", function(state)
+    while state do
+            for i,v in pairs(game.Workspace:GetChildren()) do
+                 if v.Name == "Imp" and v:FindFirstChild("Body") then
+                game.ReplicatedStorage.KSHit:FireServer(v.Body,true)
             end
-              task.wait()
-          end)
+        end
+        task.wait()
+     end
+end)
+
+
+
 
     Section:NewToggle("Anti Cube Of Death", "Antis", function(state)
         if state then
@@ -4589,7 +4594,7 @@ block.Parent = game.Workspace
     
     
 
-elseif game.PlaceId == 17290438723 then
+elseif game.PlaceId == 1729043872322131 then
 
     game:GetService("StarterGui"):SetCore("SendNotification",{Title = "Welcome!",Text = "Welcome to Hub Kykyryz0B.",Icon = "rbxassetid://7733960981",Duration = 10})
     
