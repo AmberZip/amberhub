@@ -3534,19 +3534,6 @@ local Section = Tab:NewSection("Chain Teleportation")
     end
     end)
     
-    local Section = Tab:NewSection("Anti Null")
-    
-    Section:NewToggle("Anti Null", "Anti NUll", function(state)
-        while state do
-            for i,v in pairs(game.Workspace.Mobs:GetChildren()) do
-                if v.Name == "Imp" and v:FindFirstChild("Body") then
-                    game:GetService("ReplicatedStorage").b:FireServer(v.Body)
-                end
-                task.wait()
-            end
-        end
-    end)
-    
     local Tab = Window:NewTab("Player")
     
     local Section = Tab:NewSection("Speed Hack")
@@ -4537,8 +4524,16 @@ block.Parent = game.Workspace
             end
     end)
 
-    Section:NewToggle("Disable Null (PERM)", "Disable Null minions", function(state)
-    while state do
+    Section:NewToggle("Anti Cube Of Death", "Antis", function(state)
+        if state then
+            workspace.Arena.CubeOfDeathArea["the cube of death(i heard it kills)"].CanTouch = false
+        else
+            workspace.Arena.CubeOfDeathArea["the cube of death(i heard it kills)"].CanTouch = true
+        end
+    end)
+
+        Section:NewButton("Disable Null", "Disable Null minions", function(state)
+         while state do
             for i,v in pairs(game.Workspace:GetChildren()) do
                  if v.Name == "Imp" and v:FindFirstChild("Body") then
                 game.ReplicatedStorage.KSHit:FireServer(v.Body,true)
@@ -4547,17 +4542,6 @@ block.Parent = game.Workspace
         task.wait()
      end
 end)
-
-
-
-
-    Section:NewToggle("Anti Cube Of Death", "Antis", function(state)
-        if state then
-            workspace.Arena.CubeOfDeathArea["the cube of death(i heard it kills)"].CanTouch = false
-        else
-            workspace.Arena.CubeOfDeathArea["the cube of death(i heard it kills)"].CanTouch = true
-        end
-    end)
 
     local Tab = Window:NewTab("Player")
     
