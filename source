@@ -4545,9 +4545,7 @@ block.Parent = game.Workspace
                   end
             end
               task.wait()
-          end
-                    end    
-                })
+          end)
 
     Section:NewToggle("Anti Cube Of Death", "Antis", function(state)
         if state then
