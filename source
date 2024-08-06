@@ -3536,7 +3536,7 @@ local Section = Tab:NewSection("Chain Teleportation")
     
     local Section = Tab:NewSection("Anti Null")
     
-    Section:Button("Anti Null", "Anti NUll", function(state)
+    Section:NewButton("Anti Null", "Anti NUll", function(state)
         getgenv().antinullnull = state
         while getgenv().antinullnull do
             for i,v in pairs(game.Workspace.Mobs:GetChildren()) do
