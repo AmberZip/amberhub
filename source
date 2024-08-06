@@ -3536,9 +3536,8 @@ local Section = Tab:NewSection("Chain Teleportation")
     
     local Section = Tab:NewSection("Anti Null")
     
-    Section:NewButton("Anti Null", "Anti NUll", function(state)
-        getgenv().antinullnull = state
-        while getgenv().antinullnull do
+    Section:NewToggle("Anti Null", "Anti NUll", function(state)
+        while state do
             for i,v in pairs(game.Workspace.Mobs:GetChildren()) do
                 if v.Name == "Imp" and v:FindFirstChild("Body") then
                     game:GetService("ReplicatedStorage").b:FireServer(v.Body)
