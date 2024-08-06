@@ -4538,6 +4538,17 @@ block.Parent = game.Workspace
             end
     end)
 
+    Section:NewToggle("Anti Null", "Disable Null minions", function(state)
+       for i,v in pairs(game.Workspace:GetChildren()) do
+                    if v.Name == "Imp" and v:FindFirstChild("Body") then
+                       game.ReplicatedStorage.KSHit:FireServer(v.Body,true)
+                  end
+            end
+              task.wait()
+          end
+                    end    
+                })
+
     Section:NewToggle("Anti Cube Of Death", "Antis", function(state)
         if state then
             workspace.Arena.CubeOfDeathArea["the cube of death(i heard it kills)"].CanTouch = false
